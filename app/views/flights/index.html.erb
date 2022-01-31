@@ -1,0 +1,19 @@
+<section>
+<%= form_with url: "/flights", method: :get do |f| %>
+  <%= f.label :from_airport, "From airport code:" %>
+  <%= f.select(:from_airport, @airport_codes) %>
+  <%= f.label :to_airport, "To airport code:" %>
+  <%= f.select(:to_airport, @airport_codes) %>
+  <%= f.submit "Search" %>
+<% end %>
+</section>
+<% if params[:from_airport] and params[:to_airport] %>
+<section>
+	<h1>Flight #<%= @flight.id %></h1>
+	<p><strong>From:</strong> <%= @flight.departure_airport.name %> <strong>To:</strong> <%= @flight.arrival_airport.name %><p>
+	<p><strong>Duration:</strong> <%= @flight.duration.floor %> hours <%= (@flight.duration.modulo(1)*60).to_i %> minutes</p>
+	<p><strong>Price:</strong> $<%= @flight.price.to_f.round(2) %>
+	<p><strong>Depart:</strong> <%= @flight.start_datetime %>
+	<p><strong>Seats Left:</strong> <%= @flight.seats_left %>
+</section>
+<% end %>
