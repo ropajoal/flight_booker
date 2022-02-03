@@ -1,19 +1,55 @@
 <section>
 <%= form_with url: "/flights", method: :get do |f| %>
   <%= f.label :from_airport, "From airport code:" %>
-  <%= f.select(:from_airport, @airport_codes) %>
+  <%= f.select(:from_airport, options_for_select(@airport_codes, disabled:"0", selected:"0")) %>
   <%= f.label :to_airport, "To airport code:" %>
-  <%= f.select(:to_airport, @airport_codes) %>
+  <%= f.select(:to_airport, options_for_select(@airport_codes, disabled:"0", selected:"0")) %>
+  <%= f.label :passengers %>
+  <%= f.select :passengers, options_for_select(@passengers, disabled:"0", selected:"0")  %>
+  <%= f.label :date %>
+  <%= f.select :date, options_for_select(@dates, disabled:"Date", selected:"Date")  %>
   <%= f.submit "Search" %>
 <% end %>
 </section>
-<% if params[:from_airport] and params[:to_airport] %>
-<section>
-	<h1>Flight #<%= @flight.id %></h1>
-	<p><strong>From:</strong> <%= @flight.departure_airport.name %> <strong>To:</strong> <%= @flight.arrival_airport.name %><p>
-	<p><strong>Duration:</strong> <%= @flight.duration.floor %> hours <%= (@flight.duration.modulo(1)*60).to_i %> minutes</p>
-	<p><strong>Price:</strong> $<%= @flight.price.to_f.round(2) %>
-	<p><strong>Depart:</strong> <%= @flight.start_datetime %>
-	<p><strong>Seats Left:</strong> <%= @flight.seats_left %>
-</section>
+<% if @flights %>
+  <section>
+    
+    <%= form_with url: "/booking", method: :get do |f| %>
+      <%= f.hidden_field :passengers, value: params[:passengers] || 1 %>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Price</th>
+            <th scope="col">Start-Datetime</th>
+            <th scope="col">Seats-Left</th>
+            <th scope="col">Select</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @flights.each do |flight| %>
+            <tr>
+              <th scope="row"><%= flight.id %></th>
+              <td><%= flight.departure_airport.code %></td>
+              <td><%= flight.arrival_airport.code %></td>
+              <td><%= flight.duration.floor %> hours <%= (flight.duration.modulo(1)*60).to_i %> minutes</td>
+              <td>$<%= flight.price.to_f.round(2) %></td>
+              <td><%= flight.start_datetime %></td>
+              <td><%= flight.seats_left %></td>
+              <td><%= f.radio_button :flight_id, flight.id, required: true %></td>
+            </tr>
+          <% end %>
+          <% if @flights.empty? %>
+            <tr>
+              <td colspan="8" style="text-align:center">No match for Flights</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= f.submit "Book Flight" %>
+    <% end %>
+  </section>
 <% end %>
