@@ -1,0 +1,6 @@
+<h1>Booking: <%= @booking.id %></h1>
+<h3>Passengers:</h3>
+<% @booking.passengers.each do |passenger| %>
+  <article>Name: <%= passenger.name %> Email: <%= passenger.email %><article> 
+<% end %>
+<button>Pay Now</button>
