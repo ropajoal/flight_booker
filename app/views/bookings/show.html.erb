@@ -1,6 +1,6 @@
 <h1>Booking: <%= @booking.id %></h1>
 <h3>Passengers:</h3>
 <% @booking.passengers.each do |passenger| %>
-  <article>Name: <%= passenger.name %> Email: <%= passenger.email %><article> 
+  <article><strong>Name:</strong> <%= passenger.name %> <strong>Email:</strong> <%= passenger.email %><article> 
 <% end %>
-<button>Pay Now</button>
+<%= button_to "Pay Now!", checkout_create_path, params: {id: @booking.id}, remote: true %>
