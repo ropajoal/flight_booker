@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Confirmation email for attend the flight#<%= @passenger.booking.flight.id %></h1>
+    <p>
+	  This email has been sent to you because someone has booked a flight and input this email to be a passenger
+    </p>
+    <p>
+      To confirm you as a passenger please confirm this email: <%= @url %> 
+    </p>
+    <p>Thanks for flying with us and have a great day!</p>
+  </body>
+</html>
+
+

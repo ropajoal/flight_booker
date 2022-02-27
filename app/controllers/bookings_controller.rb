@@ -13,6 +13,7 @@ class BookingsController < ApplicationController
       flight = Flight.find(params[:booking][:flight_id])
       flight.seats_left -= params[:booking][:passengers_attributes].keys.length
       flight.save!
+      @booking.passengers.each{ |passenger| PassengerMailer.with(passenger: passenger).confirmation_email.deliver_now! }
       redirect_to action: "show", id: @booking.id
     else
       puts booking.errors.full_messages
